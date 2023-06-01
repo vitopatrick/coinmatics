@@ -82,7 +82,7 @@ const LoginForm = () => {
           {/* Email or sub account */}
           <div className="flex flex-col mt-8">
             <label htmlFor="email" className="text-sm text-bg font-bold">
-              Email/Sub-Account
+              Email
             </label>
             <div>
               <input

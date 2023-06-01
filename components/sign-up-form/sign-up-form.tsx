@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { auth, store } from "../../firebase";
 import Link from "next/link";
+import { useCountry } from "../../hooks/useCountry";
 
 const SignUpForm = ({ move }: any) => {
   const router = useRouter();
@@ -16,6 +17,9 @@ const SignUpForm = ({ move }: any) => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [country, setCountry] = useState();
+
+  // countries
+  const { countries } = useCountry();
 
   const registerUser = async (e: any) => {
     e.preventDefault();
@@ -211,13 +215,19 @@ const SignUpForm = ({ move }: any) => {
                 name="country"
                 id="select country"
                 className="w-full py-3 px-2 outline-none"
+                value={country}
+                onChange={(e: any) => setCountry(e.target.value)}
               >
-                <option value="nigeria">Nigeria</option>
-                <option value="nigeria">Nigeria</option>
+                {countries.map((country: any) => (
+                  <option value={country.country}>{country.country}</option>
+                ))}
               </select>
             </div>
           </div>
-          <button className="font-main bg-[#2980b9] text-white text-[1rem] mt-8 rounded shadow inline-block w-full py-2">
+          <button
+            onClick={registerUser}
+            className="font-main bg-[#2980b9] text-white text-[1rem] mt-8 rounded shadow inline-block w-full py-2"
+          >
             Register
           </button>
         </form>
