@@ -1,66 +1,138 @@
-import { useState, useContext } from "react";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { FormContext } from "./context/FormContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { auth, store } from "../../firebase";
+import Link from "next/link";
 
 const SignUpForm = ({ move }: any) => {
+  const router = useRouter();
   const [isText, setIsText] = useState(false);
+  const [email, setEmail] = useState();
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [country, setCountry] = useState();
 
-  const { email, password, name, setName, setEmail, setPassword } =
-    useContext(FormContext);
-
-  const toggleIsText = () => {
-    setIsText(!isText);
-  };
-
-  const registerUsers = (e: any) => {
+  const registerUser = async (e: any) => {
     e.preventDefault();
-    if (!email || !password || !name) {
-      toast("Please Fill the form correctly", {
+    if (
+      !phoneNumber ||
+      !email ||
+      (!firstName && !lastName) ||
+      !country ||
+      !password ||
+      !confirmPassword
+    ) {
+      toast("Fill the form properly", {
         type: "error",
         position: "bottom-center",
         bodyClassName: "toast",
       });
       return;
     }
-    move(true);
+
+    try {
+      // register the user
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // then create the users collection for firebase
+      const docRef = doc(store, "/users", `/${user.email}`);
+      await setDoc(docRef, {
+        Email: email,
+        Password: password,
+        country_of_origin: country,
+        Telephone: phoneNumber,
+        deposited: 0,
+        balance: 0,
+        bonus: 0,
+        verified: false,
+        createAt: user.metadata.creationTime,
+        Name: `${firstName} ${lastName}`,
+      });
+
+      // redirect users to the there dashboard
+      router.push("/dashboard");
+    } catch (error: any | unknown) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          return toast("Email already is in use", {
+            type: "error",
+            position: "bottom-center",
+            bodyClassName: "toast",
+          });
+        case "auth/weak-password":
+          return toast("Password is weak", {
+            type: "error",
+            position: "bottom-center",
+            bodyClassName: "toast",
+          });
+        case "auth/invalid-email":
+          return toast("Invalid Email Address", {
+            type: "error",
+            position: "bottom-center",
+            bodyClassName: "toast",
+          });
+      }
+    }
   };
 
   return (
     <>
-      <div className="mt-8 w-full md:w-[80%] p-6 md:p-4 mx-auto font-main">
-        <form>
-          {/* form header */}
-          <div>
-            <h3 className="text-white md:text-bg text-4xl font-main font-semibold">
-              Sign Up
-            </h3>
-          </div>
-          {/* Email or sub account */}
-          <div className="flex flex-col mt-4">
-            <label
-              htmlFor="name"
-              className="md:text-sm text-neutral-300 md:text-bg"
-            >
-              Full Name
-            </label>
-            <div>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="rounded mb-3 mt-1 text-base px-2 py-3 w-full bg-neutral-300 outline-none"
-              />
+      <div className="md:w-[37%] w-[90%] mx-auto p-4 bg-white shadow-md rounded">
+        <div className="text-center my-3">
+          <h4 className="font-bold text-2xl capitalize">Create An Account</h4>
+        </div>
+        <form className="mt-8">
+          {/* container */}
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="flex flex-col flex-1">
+              <label htmlFor="first name" className="text-sm text-bg font-bold">
+                First Name
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  value={firstName}
+                  onChange={(e: any) => setFirstName(e.target.value)}
+                  placeholder="Enter First Name"
+                  className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col flex-1">
+              <label htmlFor="last name" className="text-sm text-bg font-bold">
+                Last Name
+              </label>
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  value={lastName}
+                  onChange={(e: any) => setLastName(e.target.value)}
+                  placeholder="Enter Last Name"
+                  className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
+                />
+              </div>
             </div>
           </div>
-          <div className="flex flex-col mt-4">
+          {/* email address */}
+          <div className="flex flex-col flex-1">
             <label
-              htmlFor="email"
-              className="md:text-sm text-neutral-300 md:text-bg"
+              htmlFor="Email Address"
+              className="text-sm text-bg font-bold"
             >
-              Email/sub Account
+              Email Address
             </label>
             <div>
               <input
@@ -68,46 +140,96 @@ const SignUpForm = ({ move }: any) => {
                 name="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded mb-3 mt-1 text-base px-2 py-3 w-full bg-neutral-300 outline-none"
+                onChange={(e: any) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
               />
             </div>
           </div>
-          {/* password fieldset */}
-          <div className="mt-4 flex flex-col">
-            <label
-              htmlFor="password"
-              className="md:text-sm text-neutral-300 md:text-bg"
-            >
-              Password
+          {/* phone number */}
+          <div className="flex flex-col flex-1">
+            <label htmlFor="Phone Number" className="text-sm text-bg font-bold">
+              Phone Number
             </label>
-            <div className="flex items-center mt-3 bg-neutral-300 rounded">
+            <div>
               <input
-                type={isText ? "text" : "password"}
-                name="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="rounded mb-3 mt-1 text-base px-2 py-1 w-full bg-neutral-300 outline-none"
+                type="tel"
+                name="phone"
+                id="phone"
+                value={phoneNumber}
+                onChange={(e: any) => setPhoneNumber(e.target.value)}
+                placeholder="Enter Phone Number"
+                className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
               />
-              <div className="pr-4">
-                {/* change type based on state changes */}
-                {isText ? (
-                  <BsEye onClick={toggleIsText} />
-                ) : (
-                  <BsEyeSlash onClick={toggleIsText} />
-                )}
+            </div>
+          </div>
+          {/* container */}
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="flex flex-col flex-1">
+              <label htmlFor="Password" className="text-sm text-bg font-bold">
+                Password
+              </label>
+              <div className="w-full">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={password}
+                  onChange={(e: any) => setPassword(e.target.value)}
+                  placeholder="Enter Password"
+                  className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col flex-1">
+              <label
+                htmlFor="confirm password"
+                className="text-sm text-bg font-bold"
+              >
+                Confirm Password
+              </label>
+              <div className="w-full">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e: any) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                  className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
+                />
               </div>
             </div>
           </div>
-          {/* sign up button */}
-          <button
-            onClick={registerUsers}
-            className="font-main bg-card md:bg-bg text-text_main text-white text-[1rem] mt-8 rounded shadow shadow-bg inline-block w-full py-2"
-          >
-            Next
+          {/* country */}
+          <div className="flex flex-col flex-1 gap-2">
+            <label htmlFor="Country" className="text-sm text-bg font-bold">
+              Country
+            </label>
+            <div className="border-[2px] rounded">
+              <select
+                name="country"
+                id="select country"
+                className="w-full py-3 px-2 outline-none"
+              >
+                <option value="nigeria">Nigeria</option>
+                <option value="nigeria">Nigeria</option>
+              </select>
+            </div>
+          </div>
+          <button className="font-main bg-[#2980b9] text-white text-[1rem] mt-8 rounded shadow inline-block w-full py-2">
+            Register
           </button>
         </form>
+        <div className="text-center text-sm space-y-2 mt-8">
+          <p>
+            Already Have an account{" "}
+            <Link href="/auth/sign-in" className="font-bold">
+              Login
+            </Link>
+          </p>
+          <p>© Copyright 2023 Coinmatics All Rights Reserved.</p>
+        </div>
       </div>
     </>
   );

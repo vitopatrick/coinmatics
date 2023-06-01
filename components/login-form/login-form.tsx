@@ -71,17 +71,17 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="mt-8 w-full md:w-[80%] font-main p-6 md:p-4  mx-auto">
+      <div className="md:w-[30%] mx-auto p-4 bg-white rounded shadow-md ">
         <form>
           {/* form header */}
           <div>
-            <h3 className="md:text-bg text-4xl font-bold  text-white ">
-              Log In
+            <h3 className="md:text-bg text-4xl font-bold text-center ">
+              User Login
             </h3>
           </div>
           {/* Email or sub account */}
           <div className="flex flex-col mt-8">
-            <label htmlFor="email" className="text-sm md:text-bg text-white">
+            <label htmlFor="email" className="text-sm text-bg font-bold">
               Email/Sub-Account
             </label>
             <div>
@@ -91,22 +91,24 @@ const LoginForm = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-neutral-300"
+                placeholder="name@example.com"
+                className="rounded my-3 text-base px-2 py-3 w-full outline-none bg-white border-[1px]"
               />
             </div>
           </div>
           {/* password fieldset */}
           <div className="mt-4 flex flex-col">
-            <label htmlFor="password" className="text-sm md:text-bg text-white">
+            <label htmlFor="password" className="text-sm text-bg  font-bold">
               Password
             </label>
-            <div className="flex items-center mt-3 bg-neutral-300 py-2 rounded">
+            <div className="flex items-center mt-3 bg-white border-[2px] py-2 rounded">
               <input
                 type={isText ? "text" : "password"}
                 name="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter Password"
                 className="flex-1 bg-transparent outline-none py-1 pl-2"
               />
               <div className="pr-4">
@@ -122,17 +124,28 @@ const LoginForm = () => {
           {/* login button */}
           <button
             onClick={loginUser}
-            className="font-main md:bg-bg bg-card text-white text-[1rem] mt-8 rounded shadow inline-block w-full py-2"
+            className="font-main bg-[#2980b9] text-white text-[1rem] mt-8 rounded shadow inline-block w-full py-2"
           >
-            Log in
+            Login
           </button>
-          <div className="flex justify-end my-4">
-            <Link
-              href="/auth/forgot-password"
-              className="justify-end text-sm font-main text-white md:text-bg"
-            >
-              forgot password
-            </Link>
+          <div className="flex flex-col justify-center items-center text-center my-4">
+            <div className="flex gap-1">
+              <p>Forget Password</p>{" "}
+              <Link href="/auth/forgot-password" className="font-bold">
+                {" "}
+                Reset
+              </Link>
+            </div>
+            <div className="flex gap-1">
+              <p>Don't Have an account yet </p>{" "}
+              <Link href="/auth/sign-up" className="font-bold">
+                {" "}
+                sign Up?
+              </Link>
+            </div>
+          </div>
+          <div className="text-center py-3 text-sm">
+            © copyright 2023 coinmatics All Rights Reserved
           </div>
         </form>
       </div>

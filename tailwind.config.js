@@ -8,18 +8,21 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        black: "satoshi-black",
-        bold: "satoshi-bold",
-        light: "satoshi-light",
-        medium: "satoshi-medium",
-        regular: "satoshi-regular",
-        variable: "satoshi-variable",
+        saBlack: "satoshi-black",
+        saBold: "satoshi-bold",
+        saLight: "satoshi-light",
+        saMedium: "satoshi-medium",
+        saRegular: "satoshi-regular",
+        saVariable: "satoshi-variable",
+        header: ["Montserrat Alternates", "sans-serif"],
+        body: ["Open Sans", "sans-serif"],
       },
       colors: {
         bg: "#0c0a09",
         card: "#18181b",
         bgBoard: "#0b0e11",
         button: "#059669",
+        textColor: "#00f6b2",
       },
     },
   },
