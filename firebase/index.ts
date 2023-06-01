@@ -5,13 +5,14 @@ import { getStorage } from "firebase/storage";
 
 // these are the firebase config files
 const firebaseConfig = {
-  apiKey: "AIzaSyAdOnku_4QmSDtIpyDChnAG28CnlKXHvC4",
-  authDomain: "eightcap-e3774.firebaseapp.com",
-  projectId: "eightcap-e3774",
-  storageBucket: "eightcap-e3774.appspot.com",
-  messagingSenderId: "539698828514",
-  appId: "1:539698828514:web:97465213a08f3244847abb",
+  apiKey: "AIzaSyBKXsk5Ohnva-W5uIbFvbqjbp5zpwPM3n8",
+  authDomain: "coinmatics-dfa39.firebaseapp.com",
+  projectId: "coinmatics-dfa39",
+  storageBucket: "coinmatics-dfa39.appspot.com",
+  messagingSenderId: "994227790904",
+  appId: "1:994227790904:web:144afed293985209efb2cd",
 };
+
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
