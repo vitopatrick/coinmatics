@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
 import { ImSwitch } from "react-icons/im";
 import { useFetchUser } from "../../../hooks/useFetchUser";
@@ -11,8 +10,6 @@ import MobileSideNav from "../side-nav/mobile-sidenav";
 import { useState } from "react";
 
 const Header = () => {
-  const pathname = usePathname();
-  const header = pathname?.split("/")[1];
   const { loading, userState: user }: any = useFetchUser();
   const router = useRouter();
   const [hide, setHide] = useState(true);
@@ -29,7 +26,7 @@ const Header = () => {
         <div className="flex justify-between items-center ">
           {/* flex item child */}
           <div className="flex items-center w-[90%] text-2xl font-semibold font-sec text-paper py-2 capitalize">
-            {header}
+            <img src="/img/logo.svg" alt="logo" />
           </div>
           {/* icons div */}
           <div className="flex items-center flex-1 gap-4">
