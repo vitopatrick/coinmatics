@@ -21,13 +21,13 @@ const DashboardAccountCards = () => {
           loading={loading}
         />
         <AmountCard
-          accountType={"Bonus"}
-          amount={user?.bonus}
+          accountType={"Profit"}
+          amount={user?.profit ? user?.profit : 0}
           loading={loading}
         />
         <AmountCard
-          accountType={"Profit"}
-          amount={user?.profit ? user?.profit : 0}
+          accountType={"Bonus"}
+          amount={user?.bonus}
           loading={loading}
         />
         {/* <PlanCard
