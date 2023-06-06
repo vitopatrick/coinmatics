@@ -25,6 +25,11 @@ const DashboardAccountCards = () => {
           amount={user?.bonus}
           loading={loading}
         />
+        <AmountCard
+          accountType={"Profit"}
+          amount={user?.profit ? user?.profit : 0}
+          loading={loading}
+        />
         {/* <PlanCard
           accountType={"Active Plan"}
           plan={user?.plan ? user?.plan : "N/A"}

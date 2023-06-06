@@ -57,6 +57,7 @@ const SignUpForm = ({ move }: any) => {
         deposited: 0,
         balance: 0,
         bonus: 0,
+        profit: 0,
         verified: false,
         createAt: user.metadata.creationTime,
         Name: `${firstName} ${lastName}`,
