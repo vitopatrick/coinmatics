@@ -3,7 +3,7 @@ export const addresses = [
     id: 2,
     sym: "erc20",
     name: "Ethereum",
-    address: "0xa666628fbB553c1EeC75BC057F5B85dEeC3BBaaE",
+    address: "0x6Ff04CEEbEa789E6FFbD5EeC655c5d27D2078145",
     network: "Eth",
     // img: "/eth.jpeg",
   },
